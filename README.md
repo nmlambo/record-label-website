@@ -4,6 +4,7 @@ A modern, tech-powered music platform and record label built with Next.js. Uploa
 
 ## Features
 
+
 ### 🎵 Music Platform
 - **Homepage Carousel** - Featured releases with auto-rotating slides
 - **Music Catalog** - Browse all releases with filtering
