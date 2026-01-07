@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { MobileMenu } from "./mobile-menu"
 import { AuthDialog } from "./auth-dialog"
+import { SearchDialog } from "./search-dialog"
 import { useAuth } from "@/lib/auth-context"
 import {
   DropdownMenu,
@@ -19,6 +20,7 @@ import {
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isAuthOpen, setIsAuthOpen] = useState(false)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
   const { user, signOut } = useAuth()
 
   const handleSignOut = async () => {
@@ -50,7 +52,12 @@ export function Header() {
               </nav>
             </div>
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" className="hidden md:flex cursor-pointer">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="hidden md:flex cursor-pointer"
+                onClick={() => setIsSearchOpen(true)}
+              >
                 <Search className="h-5 w-5" />
               </Button>
               {user ? (
@@ -98,6 +105,7 @@ export function Header() {
 
       <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <AuthDialog open={isAuthOpen} onOpenChange={setIsAuthOpen} />
+      <SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
     </>
   )
 }
