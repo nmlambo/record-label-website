@@ -81,7 +81,7 @@ export default function ReleasePage() {
   return (
     <div className="min-h-screen pb-32 md:pb-24">
       <Header />
-      <main className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12 max-w-[1390px]">
+      <main className="container mx-auto px-4 pt-4 pb-22 md:pt-6 md:pb-12 max-w-[1390px]">
         <Breadcrumb 
           items={[
             { label: "Home", href: "/" },
