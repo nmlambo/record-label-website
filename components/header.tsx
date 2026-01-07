@@ -27,7 +27,7 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-2xl supports-backdrop-filter:bg-background/60">
         <div className="container mx-auto px-4 max-w-[1390px]">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-8">
@@ -35,11 +35,11 @@ export function Header() {
                 NUMBA
               </Link>
               <nav className="hidden md:flex items-center gap-6">
-                <Link href="/music" className="text-sm font-medium hover:text-muted-foreground transition-colors cursor-pointer">
-                  Music
-                </Link>
                 <Link href="/artists" className="text-sm font-medium hover:text-muted-foreground transition-colors cursor-pointer">
                   Artists
+                </Link>
+                <Link href="/sample-packs" className="text-sm font-medium hover:text-muted-foreground transition-colors cursor-pointer">
+                  Sample Packs
                 </Link>
                 <Link href="/about" className="text-sm font-medium hover:text-muted-foreground transition-colors cursor-pointer">
                   About
@@ -50,12 +50,6 @@ export function Header() {
               </nav>
             </div>
             <div className="flex items-center gap-4">
-              <Link href="/upload" className="hidden md:block cursor-pointer">
-                <Button variant="default" size="sm" className="bg-black text-white hover:bg-black/90">
-                  <Upload className="h-4 w-4 mr-2" />
-                  Submit Demo
-                </Button>
-              </Link>
               <Button variant="ghost" size="icon" className="hidden md:flex cursor-pointer">
                 <Search className="h-5 w-5" />
               </Button>

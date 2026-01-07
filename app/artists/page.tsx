@@ -2,57 +2,32 @@ import { Header } from "@/components/header"
 import { MobileNav } from "@/components/mobile-nav"
 import { MusicPlayer } from "@/components/music-player"
 import { ArtistCard } from "@/components/artist-card"
+import { Breadcrumb } from "@/components/breadcrumb"
+import { getAllArtists } from "@/lib/artists-data"
+import { releases } from "@/lib/releases-data"
 
-const artists = [
-  {
-    id: "luna-eclipse",
-    name: "Luna Eclipse",
-    genre: "Electronic / Ambient",
-    image: "/luna-eclipse-artist-portrait-black-white.jpg",
-    releaseCount: 12,
-  },
-  {
-    id: "stellar-wave",
-    name: "Stellar Wave",
-    genre: "House / Techno",
-    image: "/stellar-wave-artist-portrait-black-white.jpg",
-    releaseCount: 8,
-  },
-  {
-    id: "nova-sound",
-    name: "Nova Sound",
-    genre: "Downtempo / Chill",
-    image: "/nova-sound-artist-portrait-black-white.jpg",
-    releaseCount: 15,
-  },
-  {
-    id: "metro-beats",
-    name: "Metro Beats",
-    genre: "Hip Hop / Beats",
-    image: "/metro-beats-artist-portrait-black-white.jpg",
-    releaseCount: 6,
-  },
-  {
-    id: "echo-chamber",
-    name: "Echo Chamber",
-    genre: "Experimental / IDM",
-    image: "/echo-chamber-artist-portrait-black-white.jpg",
-    releaseCount: 10,
-  },
-  {
-    id: "rhythm-collective",
-    name: "Rhythm Collective",
-    genre: "Drum & Bass",
-    image: "/rhythm-collective-artist-portrait-black-white.jpg",
-    releaseCount: 9,
-  },
-]
+const allArtists = getAllArtists()
+
+const artists = allArtists.map(artist => ({
+  id: artist.id,
+  name: artist.name,
+  genre: artist.genre,
+  image: artist.image,
+  releaseCount: artist.id === "soundquest" ? releases.length : Math.floor(Math.random() * 10) + 3,
+}))
 
 export default function ArtistsPage() {
   return (
     <div className="min-h-screen pb-32 md:pb-24">
       <Header />
-      <main className="container mx-auto px-4 py-8 md:py-12 max-w-[1390px]">
+      <main className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12 max-w-[1390px]">
+        <Breadcrumb 
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Artists" }
+          ]}
+        />
+        
         <div className="mb-8 md:mb-12">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Artists</h1>
           <p className="text-lg text-muted-foreground">Meet the talented artists on our label</p>

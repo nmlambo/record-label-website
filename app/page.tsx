@@ -9,9 +9,9 @@ export default function HomePage() {
     <div className="min-h-screen pb-32 md:pb-24">
       <Header />
       <HeroCarousel />
-      <main className="container mx-auto px-4 2xl:px-0 max-w-[1390px]">
+      {/* <main className="container mx-auto px-4 2xl:px-0 max-w-[1390px]">
         <ReleasesGrid />
-      </main>
+      </main> */}
       <MobileNav />
       <MusicPlayer />
     </div>

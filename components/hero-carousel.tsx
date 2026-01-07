@@ -84,13 +84,13 @@ export function HeroCarousel() {
   }
 
   return (
-    <section className="relative h-[60vh] md:h-[70vh] overflow-hidden group">
+    <section className="relative h-[calc(100dvh-12.1rem)] md:h-[calc(100dvh-10.5rem)] overflow-hidden group flex items-center">
       {/* Slides */}
-      <div className="relative h-full">
+      <div className="relative h-full w-full">
         {slides.map((slide, index) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-700 ${
+            className={`absolute inset-0 transition-opacity duration-700 flex items-center ${
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -102,12 +102,12 @@ export function HeroCarousel() {
             </div>
 
             {/* Content */}
-            <div className="relative z-20 h-full flex items-center justify-center">
+            <div className="relative z-20 w-full flex items-center justify-center">
               <div className="container mx-auto px-4">
-                <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+                <div className="flex flex-col md:flex-row items-center justify-center fluid-gap-4 md:gap-12">
                   {/* Album Artwork */}
                   <Link href={slide.link} className="group/card cursor-pointer">
-                    <div className="relative w-64 h-64 md:w-80 md:h-80 transition-transform duration-300 group-hover/card:scale-105">
+                    <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 transition-transform duration-300 group-hover/card:scale-105">
                       <img
                         src={slide.image || "/placeholder.svg"}
                         alt={slide.title}
@@ -119,11 +119,11 @@ export function HeroCarousel() {
 
                   {/* Release Info */}
                   <div className="text-center md:text-left">
-                    <p className="text-sm font-medium text-black mb-2 tracking-wider uppercase">
+                    <p className="fluid-text-xs md:text-sm font-medium text-black mb-2 tracking-wider uppercase">
                       {slide.type}
                     </p>
-                    <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-3 text-black whitespace-nowrap">{slide.title}</h2>
-                    <p className="text-xl md:text-2xl text-black mb-6">{slide.artist}</p>
+                    <h2 className="fluid-text-3xl md:text-6xl font-bold tracking-tighter mb-3 text-black">{slide.title}</h2>
+                    <p className="fluid-text-lg md:text-2xl text-black mb-6">{slide.artist}</p>
                     <Button 
                       size="lg" 
                       className="bg-white text-black hover:bg-white/90"
@@ -139,11 +139,11 @@ export function HeroCarousel() {
         ))}
       </div>
 
-      {/* Navigation Arrows */}
+      {/* Navigation Arrows - Always visible */}
       <Button
         variant="ghost"
         size="icon"
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white transition-opacity"
         onClick={prevSlide}
       >
         <ChevronLeft className="h-6 w-6" />
@@ -151,14 +151,14 @@ export function HeroCarousel() {
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white transition-opacity"
         onClick={nextSlide}
       >
         <ChevronRight className="h-6 w-6" />
       </Button>
 
-      {/* Pagination Dots */}
-      <div className="absolute bottom-0 sm:bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+      {/* Pagination Dots - Hidden on mobile */}
+      <div className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 z-10 gap-2">
         {slides.map((_, index) => (
           <button
             key={index}

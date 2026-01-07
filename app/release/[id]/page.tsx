@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import { Header } from "@/components/header"
 import { MobileNav } from "@/components/mobile-nav"
 import { MusicPlayer } from "@/components/music-player"
+import { Breadcrumb } from "@/components/breadcrumb"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { PlayCircle, PauseCircle, ExternalLink, ShoppingCart } from "lucide-react"
@@ -80,7 +81,16 @@ export default function ReleasePage() {
   return (
     <div className="min-h-screen pb-32 md:pb-24">
       <Header />
-      <main className="container mx-auto px-4 py-8 md:py-12 max-w-[1390px]">
+      <main className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12 max-w-[1390px]">
+        <Breadcrumb 
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Artists", href: "/artists" },
+            { label: release.artist, href: `/artist/${release.artistId}` },
+            { label: release.title }
+          ]}
+        />
+        
         <div className="grid md:grid-cols-2 gap-8 md:gap-12 max-w-6xl mx-auto">
           {/* Album Art */}
           <div className="space-y-6">

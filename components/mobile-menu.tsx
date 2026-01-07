@@ -34,18 +34,25 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 <h3 className="text-sm font-semibold mb-3 text-muted-foreground">BROWSE</h3>
                 <nav className="space-y-3">
                   <Link
-                    href="/music"
-                    className="block text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    Music
-                  </Link>
-                  <Link
                     href="/artists"
                     className="block text-base hover:text-muted-foreground transition-colors"
                     onClick={onClose}
                   >
                     Artists
+                  </Link>
+                  <Link
+                    href="/artist/soundquest"
+                    className="block text-base hover:text-muted-foreground transition-colors"
+                    onClick={onClose}
+                  >
+                    Artist
+                  </Link>
+                  <Link
+                    href="/sample-packs"
+                    className="block text-base hover:text-muted-foreground transition-colors"
+                    onClick={onClose}
+                  >
+                    Sample Packs
                   </Link>
                   <Link
                     href="/merch"

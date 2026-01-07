@@ -27,7 +27,7 @@ export default function PurchaseSuccessPage() {
                 <Link href="/api/portal" className="cursor-pointer">View My Purchases</Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/music" className="cursor-pointer">Browse More Music</Link>
+                <Link href="/artists" className="cursor-pointer">Browse More Music</Link>
               </Button>
             </div>
           </Card>

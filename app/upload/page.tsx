@@ -28,10 +28,8 @@ export default function UploadPage() {
   const audioChunksRef = useRef<Blob[]>([])
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
-  const [uploadType, setUploadType] = useState<"independent" | "label">("independent")
-  
   const [formData, setFormData] = useState({
-    artistName: "",
+    artistName: "SoundQuest",
     trackTitle: "",
     genre: "",
     description: "",
@@ -181,9 +179,9 @@ export default function UploadPage() {
       <main className="container mx-auto px-4 py-8 md:py-12 max-w-[1390px]">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8 md:mb-12">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Release Your Music</h1>
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Upload Your Music</h1>
             <p className="text-lg md:text-xl text-muted-foreground">
-              Upload as an independent artist or submit for label consideration. Get paid weekly with transparent splits—no waiting months.
+              Upload your latest tracks to the Numba catalog. Your music will be available for streaming and purchase immediately.
             </p>
           </div>
 
@@ -191,80 +189,22 @@ export default function UploadPage() {
             <div className="bg-primary/10 border border-primary rounded-lg p-8 text-center">
               <CheckCircle2 className="w-16 h-16 mx-auto mb-4 text-primary" />
               <h2 className="text-2xl font-bold mb-2">
-                {uploadType === "independent" ? "Release Published Successfully!" : "Demo Submitted Successfully!"}
+                Release Published Successfully!
               </h2>
               <p className="text-muted-foreground mb-6">
-                {uploadType === "independent" 
-                  ? "Your music is now live on the platform! Fans can purchase it immediately, and you'll receive weekly payments with a transparent 75/25 split. After 1 month, you're free to release it on other platforms."
-                  : "Thank you for your submission. Our A&R team will review your demo and get back to you within 2-4 weeks."
-                }
+                Your music is now live on the platform! Fans can stream and purchase it immediately.
               </p>
               <Button onClick={resetForm}>
-                {uploadType === "independent" ? "Upload Another Release" : "Submit Another Demo"}
+                Upload Another Release
               </Button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Upload Type Selection */}
-              <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-3">Choose Upload Type</label>
-                <div className="grid md:grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setUploadType("independent")}
-                    className={`p-5 rounded-lg border text-left transition-all ${
-                      uploadType === "independent"
-                        ? "border-white bg-white/5"
-                        : "border-border hover:border-white/40"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                        uploadType === "independent" ? "border-white" : "border-muted-foreground"
-                      }`}>
-                        {uploadType === "independent" && (
-                          <div className="w-2 h-2 rounded-full bg-white" />
-                        )}
-                      </div>
-                      <h3 className="font-semibold text-base">Independent Artist</h3>
-                    </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed pl-7">
-                      Upload and sell your music directly. Keep 75% of sales, get paid weekly, 
-                      and enjoy 1-month platform exclusivity before releasing elsewhere.
-                    </p>
-                  </button>
-                  
-                  <button
-                    type="button"
-                    onClick={() => setUploadType("label")}
-                    className={`p-5 rounded-lg border text-left transition-all ${
-                      uploadType === "label"
-                        ? "border-white bg-white/5"
-                        : "border-border hover:border-white/40"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                        uploadType === "label" ? "border-white" : "border-muted-foreground"
-                      }`}>
-                        {uploadType === "label" && (
-                          <div className="w-2 h-2 rounded-full bg-white" />
-                        )}
-                      </div>
-                      <h3 className="font-semibold text-base">Submit for Label</h3>
-                    </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed pl-7">
-                      Get signed to our label with full A&R support, marketing, and priority placement. 
-                      Keep 80% of sales plus promotional benefits.
-                    </p>
-                  </button>
-                </div>
-              </div>
 
               {/* File Upload Area */}
               <div>
                 <label className="block text-lg font-semibold mb-4">
-                  {uploadType === "independent" ? "Upload your audio files" : "Submit your demo"}
+                  Upload your audio files
                 </label>
                 <div
                   onDragOver={handleDragOver}
@@ -334,6 +274,8 @@ export default function UploadPage() {
                         value={formData.artistName}
                         onChange={(e) => setFormData({ ...formData, artistName: e.target.value })}
                         placeholder="Your artist name"
+                        disabled
+                        className="bg-muted cursor-not-allowed"
                       />
                     </div>
                     <div>
@@ -503,29 +445,20 @@ export default function UploadPage() {
                   <AlertCircle className="w-5 h-5 text-muted-foreground mt-0.5" />
                   <div>
                     <h3 className="font-semibold mb-2">
-                      {uploadType === "independent" ? "Platform Guidelines" : "Submission Guidelines"}
+                      Upload Guidelines
                     </h3>
-                    {uploadType === "independent" ? (
-                      <ul className="space-y-1 text-sm text-muted-foreground">
-                        <li>• Upload high-quality audio files (WAV, FLAC preferred)</li>
-                        <li>• Your music will be exclusive to our platform for 1 month</li>
-                        <li>• You keep 75% of all sales, paid weekly</li>
-                        <li>• Only original productions or properly licensed content</li>
-                      </ul>
-                    ) : (
-                      <ul className="space-y-1 text-sm text-muted-foreground">
-                        <li>• Submit 1-3 of your best tracks</li>
-                        <li>• Include a brief description of your music and background</li>
-                        <li>• We review all submissions within 2-4 weeks</li>
-                        <li>• Only original productions will be considered</li>
-                      </ul>
-                    )}
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>• Upload high-quality audio files (WAV, FLAC preferred)</li>
+                      <li>• Maximum file size is 100MB per file</li>
+                      <li>• Include accurate track information and metadata</li>
+                      <li>• Only original productions or properly licensed content</li>
+                    </ul>
                   </div>
                 </div>
               </div>
 
               <Button type="submit" size="lg" className="w-full" disabled={files.length === 0 || isUploading}>
-                {isUploading ? "Uploading..." : uploadType === "independent" ? "Publish Release" : "Submit Demo"}
+                {isUploading ? "Uploading..." : "Publish Release"}
               </Button>
             </form>
           )}
