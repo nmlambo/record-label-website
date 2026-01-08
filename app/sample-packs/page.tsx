@@ -22,8 +22,8 @@ export default function SamplePacksPage() {
         />
         
         <div className="mb-8 md:mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Sample Packs</h1>
-          <p className="text-lg text-muted-foreground">
+          <h1 className="text-3xl md:text-6xl font-bold tracking-tight mb-4">Sample Packs</h1>
+          <p className="text-xs md:text-lg text-muted-foreground">
             Professional sound libraries and sample packs crafted by our artists
           </p>
         </div>

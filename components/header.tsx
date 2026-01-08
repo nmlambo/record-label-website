@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Menu, Search, User, LogOut, Upload } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { MobileMenu } from "./mobile-menu"
 import { AuthDialog } from "./auth-dialog"
 import { SearchDialog } from "./search-dialog"
@@ -21,7 +21,17 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isAuthOpen, setIsAuthOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const { user, signOut } = useAuth()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const handleSignOut = async () => {
     await signOut()
@@ -29,24 +39,33 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-2xl supports-backdrop-filter:bg-background/60">
+      <header className={`sticky top-0 z-50 border-b border-white/10 transition-all duration-200 ${
+        isScrolled 
+          ? 'bg-black/80 backdrop-blur-xl supports-backdrop-filter:bg-black/60' 
+          : 'bg-black'
+      }`}>
         <div className="container mx-auto px-4 max-w-[1390px]">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-8">
-              <Link href="/" className="text-xl font-bold tracking-tight cursor-pointer">
-                NUMBA
-              </Link>
+              <div className="flex items-center">
+                <Link href="/" className="text-xl font-bold tracking-tight cursor-pointer text-white">
+                  NUMBA
+                </Link>
+                <span className="text-[10px] font-semibold text-white/80 bg-white/10 px-1.5 py-0.5 rounded-full border border-white/20 backdrop-blur-sm ml-3 select-none">
+                  BETA
+                </span>
+              </div>
               <nav className="hidden md:flex items-center gap-6">
-                <Link href="/artists" className="text-sm font-medium hover:text-muted-foreground transition-colors cursor-pointer">
+                <Link href="/artists" className="text-sm font-medium text-white/80 hover:text-white transition-colors cursor-pointer">
                   Artists
                 </Link>
-                <Link href="/sample-packs" className="text-sm font-medium hover:text-muted-foreground transition-colors cursor-pointer">
+                <Link href="/sample-packs" className="text-sm font-medium text-white/80 hover:text-white transition-colors cursor-pointer">
                   Sample Packs
                 </Link>
-                <Link href="/about" className="text-sm font-medium hover:text-muted-foreground transition-colors cursor-pointer">
+                <Link href="/about" className="text-sm font-medium text-white/80 hover:text-white transition-colors cursor-pointer">
                   About
                 </Link>
-                <Link href="/contact" className="text-sm font-medium hover:text-muted-foreground transition-colors cursor-pointer">
+                <Link href="/contact" className="text-sm font-medium text-white/80 hover:text-white transition-colors cursor-pointer">
                   Contact
                 </Link>
               </nav>
@@ -55,7 +74,7 @@ export function Header() {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="hidden md:flex cursor-pointer"
+                className="hidden md:flex cursor-pointer text-white hover:bg-white/10"
                 onClick={() => setIsSearchOpen(true)}
               >
                 <Search className="h-5 w-5" />
@@ -63,7 +82,7 @@ export function Header() {
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="hidden md:flex cursor-pointer">
+                    <Button variant="ghost" size="icon" className="hidden md:flex cursor-pointer text-white hover:bg-white/10">
                       <User className="h-5 w-5" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -89,13 +108,13 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="hidden md:flex cursor-pointer"
+                  className="hidden md:flex cursor-pointer text-white hover:bg-white/10"
                   onClick={() => setIsAuthOpen(true)}
                 >
                   <User className="h-5 w-5" />
                 </Button>
               )}
-              <Button variant="ghost" size="icon" className="md:hidden cursor-pointer" onClick={() => setIsMenuOpen(true)}>
+              <Button variant="ghost" size="icon" className="md:hidden cursor-pointer text-white hover:bg-white/10" onClick={() => setIsMenuOpen(true)}>
                 <Menu className="h-5 w-5" />
               </Button>
             </div>
