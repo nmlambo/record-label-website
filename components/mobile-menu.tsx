@@ -62,7 +62,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 BETA
               </span>
             </Link>
-            <Button variant="ghost" size="icon" onClick={handleClose}>
+            <Button variant="ghost" size="icon" onClick={handleClose} className="text-white hover:bg-white/10">
               <X className="h-6 w-6" />
             </Button>
           </div>
