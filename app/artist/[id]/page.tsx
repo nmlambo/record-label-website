@@ -1,6 +1,7 @@
 "use client"
 
 import { Header } from "@/components/header"
+import { Sidebar } from "@/components/sidebar"
 import { MobileNav } from "@/components/mobile-nav"
 import { MusicPlayer } from "@/components/music-player"
 import { ReleaseCard } from "@/components/release-card"
@@ -23,8 +24,10 @@ export default function ArtistPage() {
   if (!artistInfo) {
     return (
       <div className="min-h-screen pb-32 md:pb-24">
-        <Header />
-        <main className="container mx-auto px-4 py-8 md:py-12 max-w-[1390px]">
+        <Sidebar />
+        <div className="md:ml-64">
+          <Header />
+          <main className="container mx-auto px-4 py-8 md:py-12 max-w-[1390px]">
           <div className="text-center py-12">
             <h1 className="text-4xl font-bold mb-4">Artist Not Found</h1>
             <p className="text-muted-foreground mb-6">The artist you're looking for doesn't exist.</p>
@@ -33,6 +36,7 @@ export default function ArtistPage() {
             </Link>
           </div>
         </main>
+        </div>
         <MobileNav />
         <MusicPlayer />
       </div>
@@ -41,8 +45,10 @@ export default function ArtistPage() {
 
   return (
     <div className="min-h-screen pb-32 md:pb-24">
-      <Header />
-      <main className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12 max-w-[1390px]">
+      <Sidebar />
+      <div className="md:ml-64">
+        <Header />
+        <main className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12 max-w-[1390px]">
         <div className="relative z-10">
           <Breadcrumb 
             items={[
@@ -80,7 +86,7 @@ export default function ArtistPage() {
           </div>
 
           {/* Artist Info Below Image */}
-          <div className="max-w-4xl mx-auto mt-8 md:mt-16 text-center md:text-left">
+          <div className="max-w-7xl mx-auto mb-6 md:mb-12 mt-8 md:mt-16 text-center md:text-left">
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-3">{artistInfo.name}</h1>
             <p className="text-lg text-muted-foreground mb-6">{artistInfo.genre}</p>
             
@@ -165,6 +171,7 @@ export default function ArtistPage() {
           )}
         </div>
       </main>
+      </div>
       <MobileNav />
       <MusicPlayer />
     </div>

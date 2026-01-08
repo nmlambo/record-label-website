@@ -1,8 +1,12 @@
 "use client"
 
 import Link from "next/link"
-import { X, User, Settings, ShoppingCart, LogOut, Facebook, Twitter, Instagram, Youtube } from "lucide-react"
+import { usePathname } from "next/navigation"
+import { X, Home, Users, Disc3, Package, User, Heart, ShoppingCart, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { useState } from "react"
+import { SearchDialog } from "./search-dialog"
 
 interface MobileMenuProps {
   isOpen: boolean
@@ -10,207 +14,166 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
-  if (!isOpen) return null
+  const pathname = usePathname()
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
+
+  const mainNavItems = [
+    { href: "/", label: "Home", icon: Home },
+    { href: "/artists", label: "Artists", icon: Users },
+    { href: "/music", label: "Music", icon: Disc3 },
+    { href: "/sample-packs", label: "Sample Packs", icon: Package },
+  ]
+
+  const libraryItems = [
+    { href: "/profile", label: "Profile", icon: User },
+    { href: "/favourites", label: "Wishlist", icon: Heart },
+    { href: "/cart", label: "Cart", icon: ShoppingCart },
+  ]
+
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return pathname === "/"
+    }
+    return pathname.startsWith(path)
+  }
+
+  const handleClose = () => {
+    setIsClosing(true)
+    setTimeout(() => {
+      setIsClosing(false)
+      onClose()
+    }, 300)
+  }
+
+  if (!isOpen && !isClosing) return null
 
   return (
-    <div className="fixed inset-0 z-50 bg-background md:hidden">
-      <div className="container mx-auto px-6 py-6 h-full flex flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-12">
-          <Link href="/" className="text-xl font-bold tracking-tight" onClick={onClose}>
-            NUMBA
-          </Link>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="h-6 w-6" />
-          </Button>
-        </div>
+    <>
+      <div className={`fixed inset-0 bottom-16 z-50 bg-black md:hidden transition-transform duration-300 ${
+        isClosing ? 'animate-out slide-out-to-left' : 'animate-in slide-in-from-left'
+      }`}>
+        <div className="h-full flex flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between h-16 px-6 border-b border-white/10">
+            <Link href="/" className="flex items-center" onClick={handleClose}>
+              <span className="text-xl font-bold tracking-tight text-white">NUMBA</span>
+              <span className="text-[10px] font-semibold text-white/80 bg-white/10 px-1.5 py-0.5 rounded-full border border-white/20 backdrop-blur-sm ml-3 select-none">
+                BETA
+              </span>
+            </Link>
+            <Button variant="ghost" size="icon" onClick={handleClose}>
+              <X className="h-6 w-6" />
+            </Button>
+          </div>
 
-        {/* Menu Content */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="grid grid-cols-2 gap-x-12 gap-y-8">
-            {/* Column 1 */}
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-sm font-semibold mb-3 text-muted-foreground">BROWSE</h3>
-                <nav className="space-y-3">
-                  <Link
-                    href="/artists"
-                    className="block text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    Artists
-                  </Link>
-                  <Link
-                    href="/artist/soundquest"
-                    className="block text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    Artist
-                  </Link>
-                  <Link
-                    href="/sample-packs"
-                    className="block text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    Sample Packs
-                  </Link>
-                  <Link
-                    href="/merch"
-                    className="block text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    Merch
-                  </Link>
-                  <Link
-                    href="/events"
-                    className="block text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    Events
-                  </Link>
-                </nav>
+          {/* Content */}
+          <div className="flex flex-col flex-1 min-h-0 overflow-y-auto pb-24">
+            {/* Search Button */}
+            <div className="px-3 pt-4 pb-2">
+              <button
+                onClick={() => {
+                  setIsSearchOpen(true)
+                  handleClose()
+                }}
+                className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors w-full text-white/60 hover:bg-white/10 hover:text-white"
+              >
+                <Search className="h-5 w-5 shrink-0" />
+                <span>Search</span>
+              </button>
+            </div>
+
+            {/* Main Navigation */}
+            <nav className="flex-1 px-3 py-2 space-y-1">
+              <div className="space-y-1">
+                {mainNavItems.map((item) => {
+                  const Icon = item.icon
+                  const active = isActive(item.href)
+                  
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={handleClose}
+                      className={cn(
+                        "flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors",
+                        active
+                          ? "bg-white/10 text-white"
+                          : "text-white/60 hover:bg-white/10 hover:text-white"
+                      )}
+                    >
+                      <Icon className="h-5 w-5 shrink-0" />
+                      <span>{item.label}</span>
+                    </Link>
+                  )
+                })}
               </div>
 
-              <div>
-                <h3 className="text-sm font-semibold mb-3 text-muted-foreground">ACCOUNT</h3>
-                <nav className="space-y-3">
-                  <Link
-                    href="/profile"
-                    className="flex items-center gap-2 text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    <User className="h-4 w-4" />
-                    Profile
-                  </Link>
-                  <Link
-                    href="/settings"
-                    className="flex items-center gap-2 text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    <Settings className="h-4 w-4" />
-                    Settings
-                  </Link>
-                  <Link
-                    href="/cart"
-                    className="flex items-center gap-2 text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    <ShoppingCart className="h-4 w-4" />
-                    Cart
-                  </Link>
-                  <Link
-                    href="/api/portal"
-                    className="flex items-center gap-2 text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    <ShoppingCart className="h-4 w-4" />
-                    My Purchases
-                  </Link>
-                  <button className="flex items-center gap-2 text-base hover:text-muted-foreground transition-colors">
-                    <LogOut className="h-4 w-4" />
-                    Logout
-                  </button>
-                </nav>
+              {/* Library Section */}
+              <div className="pt-6">
+                <h3 className="px-3 mb-2 text-xs font-semibold text-white/40 uppercase tracking-wider">
+                  Your Library
+                </h3>
+                <div className="space-y-1">
+                  {libraryItems.map((item) => {
+                    const Icon = item.icon
+                    const active = isActive(item.href)
+                    
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={handleClose}
+                        className={cn(
+                          "flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors",
+                          active
+                            ? "bg-white/10 text-white"
+                            : "text-white/60 hover:bg-white/10 hover:text-white"
+                        )}
+                      >
+                        <Icon className="h-5 w-5 shrink-0" />
+                        <span>{item.label}</span>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            </nav>
+
+            {/* Footer Links */}
+            <div className="px-6 py-3 mt-auto">
+              <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-white/40">
+                <Link href="/about" onClick={handleClose} className="hover:text-white/60 transition-colors">
+                  About
+                </Link>
+                <Link href="/contact" onClick={handleClose} className="hover:text-white/60 transition-colors">
+                  Contact us
+                </Link>
+                <Link href="/copyright" onClick={handleClose} className="hover:text-white/60 transition-colors">
+                  Copyright
+                </Link>
+                <Link href="/terms" onClick={handleClose} className="hover:text-white/60 transition-colors">
+                  Terms of Service
+                </Link>
+                <Link href="/dmca" onClick={handleClose} className="hover:text-white/60 transition-colors">
+                  DMCA Policy
+                </Link>
+                <Link href="/gdpr" onClick={handleClose} className="hover:text-white/60 transition-colors">
+                  GDPR
+                </Link>
               </div>
             </div>
 
-            {/* Column 2 */}
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-sm font-semibold mb-3 text-muted-foreground">DISCOVER</h3>
-                <nav className="space-y-3">
-                  <Link
-                    href="/playlists"
-                    className="block text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    Playlists
-                  </Link>
-                  <Link
-                    href="/radio"
-                    className="block text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    Radio Shows
-                  </Link>
-                  <Link
-                    href="/features"
-                    className="block text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    Features
-                  </Link>
-                </nav>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold mb-3 text-muted-foreground">INFO</h3>
-                <nav className="space-y-3">
-                  <Link
-                    href="/about"
-                    className="block text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    About
-                  </Link>
-                  <Link
-                    href="/contact"
-                    className="block text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    Contact
-                  </Link>
-                  <Link
-                    href="/jobs"
-                    className="block text-base hover:text-muted-foreground transition-colors"
-                    onClick={onClose}
-                  >
-                    Jobs
-                  </Link>
-                </nav>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold mb-3 text-muted-foreground">SOCIAL</h3>
-                <div className="flex gap-4">
-                  <a
-                    href="https://facebook.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-muted-foreground transition-colors"
-                  >
-                    <Facebook className="h-5 w-5" />
-                  </a>
-                  <a
-                    href="https://twitter.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-muted-foreground transition-colors"
-                  >
-                    <Twitter className="h-5 w-5" />
-                  </a>
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-muted-foreground transition-colors"
-                  >
-                    <Instagram className="h-5 w-5" />
-                  </a>
-                  <a
-                    href="https://youtube.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-muted-foreground transition-colors"
-                  >
-                    <Youtube className="h-5 w-5" />
-                  </a>
-                </div>
-              </div>
+            {/* Copyright */}
+            <div className="px-6 py-4 border-t border-white/10">
+              <p className="text-white/40">
+                <span className="text-xs">©</span> <span className="text-[9px]">{new Date().getFullYear()} NUMBA, Inc.</span>
+              </p>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
+    </>
   )
 }

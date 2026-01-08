@@ -39,7 +39,7 @@ export function Header() {
 
   return (
     <>
-      <header className={`sticky top-0 z-50 border-b border-white/10 transition-all duration-200 ${
+      <header className={`md:hidden sticky top-0 z-50 border-b border-white/10 transition-all duration-200 ${
         isScrolled 
           ? 'bg-black/80 backdrop-blur-xl supports-backdrop-filter:bg-black/60' 
           : 'bg-black'
@@ -47,7 +47,7 @@ export function Header() {
         <div className="container mx-auto px-4 max-w-[1390px]">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-8">
-              <div className="flex items-center">
+              <div className="flex items-center md:hidden">
                 <Link href="/" className="text-xl font-bold tracking-tight cursor-pointer text-white">
                   NUMBA
                 </Link>
@@ -55,20 +55,6 @@ export function Header() {
                   BETA
                 </span>
               </div>
-              <nav className="hidden md:flex items-center gap-6">
-                <Link href="/artists" className="text-sm font-medium text-white/80 hover:text-white transition-colors cursor-pointer">
-                  Artists
-                </Link>
-                <Link href="/sample-packs" className="text-sm font-medium text-white/80 hover:text-white transition-colors cursor-pointer">
-                  Sample Packs
-                </Link>
-                <Link href="/about" className="text-sm font-medium text-white/80 hover:text-white transition-colors cursor-pointer">
-                  About
-                </Link>
-                <Link href="/contact" className="text-sm font-medium text-white/80 hover:text-white transition-colors cursor-pointer">
-                  Contact
-                </Link>
-              </nav>
             </div>
             <div className="flex items-center gap-4">
               <Button 

@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation"
 import { useState } from "react"
 import { Header } from "@/components/header"
+import { Sidebar } from "@/components/sidebar"
 import { MobileNav } from "@/components/mobile-nav"
 import { MusicPlayer } from "@/components/music-player"
 import { Breadcrumb } from "@/components/breadcrumb"
@@ -22,8 +23,10 @@ export default function SamplePackPage() {
   if (!pack) {
     return (
       <div className="min-h-screen pb-32 md:pb-24">
-        <Header />
-        <main className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12 max-w-[1390px]">
+        <Sidebar />
+        <div className="md:ml-64">
+          <Header />
+          <main className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12 max-w-[1390px]">
           <div className="text-center py-20">
             <h1 className="text-4xl font-bold mb-4">Sample Pack Not Found</h1>
             <p className="text-muted-foreground mb-8">The sample pack you're looking for doesn't exist.</p>
@@ -32,6 +35,7 @@ export default function SamplePackPage() {
             </Link>
           </div>
         </main>
+        </div>
         <MobileNav />
         <MusicPlayer />
       </div>
@@ -49,8 +53,10 @@ export default function SamplePackPage() {
 
   return (
     <div className="min-h-screen pb-32 md:pb-24">
-      <Header />
-      <main className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12 max-w-[1390px]">
+      <Sidebar />
+      <div className="md:ml-64">
+        <Header />
+        <main className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12 max-w-[1390px]">
         <Breadcrumb 
           items={[
             { label: "Home", href: "/" },
@@ -183,6 +189,7 @@ export default function SamplePackPage() {
           </p>
         </div>
       </main>
+      </div>
       <MobileNav />
       <MusicPlayer />
     </div>

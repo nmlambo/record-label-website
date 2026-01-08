@@ -1,4 +1,5 @@
 import { Header } from "@/components/header"
+import { Sidebar } from "@/components/sidebar"
 import { MobileNav } from "@/components/mobile-nav"
 import { MusicPlayer } from "@/components/music-player"
 import { Breadcrumb } from "@/components/breadcrumb"
@@ -12,8 +13,10 @@ const samplePacks = getAllSamplePacks()
 export default function SamplePacksPage() {
   return (
     <div className="min-h-screen pb-32 md:pb-24">
-      <Header />
-      <main className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12 max-w-[1390px]">
+      <Sidebar />
+      <div className="md:ml-64">
+        <Header />
+        <main className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12 max-w-[1390px]">
         <Breadcrumb 
           items={[
             { label: "Home", href: "/" },
@@ -57,6 +60,7 @@ export default function SamplePacksPage() {
           ))}
         </div>
       </main>
+      </div>
       <MobileNav />
       <MusicPlayer />
     </div>

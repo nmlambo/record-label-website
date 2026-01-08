@@ -1,4 +1,5 @@
 import { Header } from "@/components/header";
+import { Sidebar } from "@/components/sidebar";
 import { MobileNav } from "@/components/mobile-nav";
 import { MusicPlayer } from "@/components/music-player";
 import { SocialLinks } from "@/components/social-links";
@@ -8,9 +9,11 @@ import Link from "next/link";
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen pb-32 md:pb-24">
-      <Header />
-      <main className="container mx-auto px-8 py-12 max-w-[1390px]">
+    <div className="min-h-screen bg-background pb-32 md:pb-24">
+      <Sidebar />
+      <div className="md:ml-64">
+        <Header />
+        <main className="container mx-auto px-4 py-8 max-w-[1390px]">
         {/* Hero Section */}
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6">
@@ -153,6 +156,7 @@ export default function ContactPage() {
           </div>
         </div>
       </main>
+      </div>
       <MobileNav />
       <MusicPlayer />
     </div>
