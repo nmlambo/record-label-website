@@ -2,20 +2,17 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState } from "react"
 import { Home, Users, Drum, Search, User } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { SearchDialog } from "./search-dialog"
 
 export function MobileNav() {
   const pathname = usePathname()
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   const navItems = [
     { href: "/", label: "Home", icon: Home },
     { href: "/artists", label: "Artists", icon: Users },
     { href: "/sample-packs", label: "Samples", icon: Drum },
-    { href: "#", label: "Search", icon: Search, onClick: () => setIsSearchOpen(true) },
+    { href: "/search", label: "Search", icon: Search },
     { href: "/profile", label: "Profile", icon: User },
   ]
 
@@ -26,22 +23,6 @@ export function MobileNav() {
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href
-
-            if (item.onClick) {
-              return (
-                <button
-                  key={item.label}
-                  onClick={item.onClick}
-                  className={cn(
-                    "flex flex-col items-center justify-center gap-1 transition-colors cursor-pointer",
-                    "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span className="text-xs font-medium">{item.label}</span>
-                </button>
-              )
-            }
 
             return (
               <Link
@@ -59,7 +40,6 @@ export function MobileNav() {
           })}
         </div>
       </nav>
-      <SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
     </>
   )
 }

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { SearchDialog } from "./search-dialog"
+import { ThemeToggle } from "./theme-toggle"
 
 interface MobileMenuProps {
   isOpen: boolean
@@ -161,6 +162,14 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 <Link href="/gdpr" onClick={handleClose} className="hover:text-white/60 transition-colors">
                   GDPR
                 </Link>
+              </div>
+            </div>
+
+            {/* Theme Toggle */}
+            <div className="px-6 py-3 border-t border-white/10">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-white/60">Theme</span>
+                <ThemeToggle />
               </div>
             </div>
 

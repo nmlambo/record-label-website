@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { useMusicPlayer } from "@/lib/music-player-context"
 import { DevicePicker } from "@/components/device-picker"
+import { VerifiedBadge } from "@/components/verified-badge"
 
 export function MusicPlayer() {
   const [isDevicePickerOpen, setIsDevicePickerOpen] = useState(false)
@@ -46,7 +47,7 @@ export function MusicPlayer() {
   const progress = duration ? (currentTime / duration) * 100 : 0
 
   return (
-    <div className="fixed bottom-16 md:bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 backdrop-blur-2xl supports-backdrop-filter:bg-background/60">
+    <div className="fixed bottom-16 md:bottom-0 left-0 right-0 z-50 border-t border-border bg-gradient-to-t from-background via-background to-background/0 dark:bg-background/95 backdrop-blur-2xl supports-backdrop-filter:bg-background/60">
       <div className="container mx-auto px-4 py-3 max-w-[1390px]">
         <div className="flex items-center gap-4">
           {/* Track Info */}
@@ -68,8 +69,9 @@ export function MusicPlayer() {
               <p className="text-sm font-medium truncate">
                 {currentTrack ? currentTrack.title : "No track playing"}
               </p>
-              <p className="text-xs text-muted-foreground truncate">
+              <p className="text-xs text-muted-foreground truncate flex items-center gap-1">
                 {currentArtist || "Select a track to play"}
+                {currentArtist && <VerifiedBadge className="w-3 h-3 shrink-0" />}
               </p>
             </div>
           </div>

@@ -1,11 +1,12 @@
+import { Suspense } from "react"
 import Image from "next/image"
 import { Header } from "@/components/header"
 import { Sidebar } from "@/components/sidebar"
 import { MobileNav } from "@/components/mobile-nav"
 import { MusicPlayer } from "@/components/music-player"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Heart, ShoppingCart, Play, Trash2 } from "lucide-react"
+import { Heart, ShoppingCart, Play, Trash2, Search } from "lucide-react"
+import { Input } from "@/components/ui/input"
 
 const wishlistItems = [
   {
@@ -50,87 +51,121 @@ const wishlistItems = [
   },
 ]
 
-export default function FavouritesPage() {
+function WishlistContent() {
   const totalValue = wishlistItems.reduce((sum, item) => sum + item.price, 0)
 
   return (
-    <div className="min-h-screen pb-32 md:pb-24">
+    <div className="min-h-screen bg-background pb-32 md:pb-24">
       <Sidebar />
       <div className="md:ml-64">
         <Header />
         <main className="container mx-auto px-6 pt-6 pb-24 md:px-12 md:pt-12 md:pb-16 max-w-[1390px]">
-          <div className="max-w-4xl mx-auto">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-3">
-                <Heart className="size-8 text-foreground" />
-                <div>
-                  <h1 className="text-3xl font-bold text-foreground">Wishlist</h1>
-                  <p className="text-muted-foreground">
-                    {wishlistItems.length} items • ${totalValue.toFixed(2)} total
-                  </p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="size-10 sm:size-14 rounded-full bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center">
+                <Heart className="size-5 sm:size-7 text-white fill-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold">Your Wishlist</h1>
+                <p className="text-sm sm:text-base text-muted-foreground">
+                  {wishlistItems.length} saved items • ${totalValue.toFixed(2)} total
+                </p>
+              </div>
+            </div>
+            <Button className="gap-2 w-full sm:w-auto">
+              <ShoppingCart className="size-4" />
+              Add All to Cart
+            </Button>
+          </div>
+
+          <div className="relative mb-6 sm:mb-8">
+            <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 size-4 sm:size-5 text-muted-foreground" />
+            <Input
+              placeholder="Search your wishlist..."
+              className="w-full pl-10 sm:pl-12 h-10 sm:h-12 text-sm sm:text-base"
+            />
+          </div>
+
+          <div className="space-y-2">
+            {wishlistItems.map((item, index) => (
+              <div
+                key={item.id}
+                className="group flex items-center gap-2 sm:gap-4 p-3 sm:p-4 rounded-lg bg-card hover:bg-muted/50 transition-colors border"
+              >
+                <span className="hidden sm:block w-6 text-center text-sm text-muted-foreground group-hover:hidden">
+                  {index + 1}
+                </span>
+                <button className="hidden sm:hidden sm:group-hover:flex w-6 items-center justify-center">
+                  <Play className="size-4 fill-current" />
+                </button>
+
+                <div className="relative shrink-0">
+                  <Image
+                    src={item.image || "/placeholder.svg"}
+                    alt={item.title}
+                    width={56}
+                    height={56}
+                    className="size-12 sm:size-14 rounded object-cover"
+                  />
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-medium truncate text-sm sm:text-base">{item.title}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{item.artist}</p>
+                  <div className="flex items-center gap-2 mt-1 sm:hidden">
+                    <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                      {item.type}
+                    </span>
+                    <span className="text-sm font-medium">${item.price.toFixed(2)}</span>
+                  </div>
+                </div>
+
+                <span className="hidden sm:inline-flex px-3 py-1 text-xs font-medium text-muted-foreground bg-muted rounded-full">
+                  {item.type}
+                </span>
+
+                <span className="hidden sm:block w-20 text-right font-medium">${item.price.toFixed(2)}</span>
+
+                <div className="flex items-center gap-1 sm:gap-2 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                  <Button size="sm" className="h-8 px-2 sm:px-3">
+                    <ShoppingCart className="size-4" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="text-muted-foreground hover:text-red-500 hover:bg-transparent h-8 w-8"
+                  >
+                    <Trash2 className="size-4" />
+                  </Button>
                 </div>
               </div>
-              <Button className="gap-2">
-                <ShoppingCart className="size-4" />
-                Add All to Cart
-              </Button>
-            </div>
-
-            {/* Wishlist Items */}
-            <div className="space-y-4">
-              {wishlistItems.map((item) => (
-                <Card key={item.id} className="overflow-hidden">
-                  <CardContent className="p-0">
-                    <div className="flex items-center gap-4 p-4">
-                      {/* Album Art */}
-                      <div className="relative group shrink-0">
-                        <div className="w-20 h-20 bg-muted rounded-md" />
-                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center">
-                          <Button size="icon" variant="ghost" className="text-white hover:text-white hover:bg-white/20">
-                            <Play className="size-6 fill-current" />
-                          </Button>
-                        </div>
-                      </div>
-
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs text-muted-foreground uppercase tracking-wide">{item.type}</p>
-                        <h3 className="font-semibold text-foreground truncate">{item.title}</h3>
-                        <p className="text-sm text-muted-foreground">{item.artist}</p>
-                      </div>
-
-                      {/* Price & Actions */}
-                      <div className="flex items-center gap-3">
-                        <span className="font-semibold text-foreground">${item.price.toFixed(2)}</span>
-                        <Button size="sm" className="gap-2">
-                          <ShoppingCart className="size-4" />
-                          Add to Cart
-                        </Button>
-                        <Button size="icon" variant="ghost" className="text-muted-foreground hover:text-destructive">
-                          <Trash2 className="size-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {/* Empty State (shown when list is empty) */}
-            {wishlistItems.length === 0 && (
-              <div className="text-center py-16">
-                <Heart className="size-16 text-muted-foreground mx-auto mb-4" />
-                <h2 className="text-xl font-semibold text-foreground mb-2">Your wishlist is empty</h2>
-                <p className="text-muted-foreground mb-6">Start adding tracks and sample packs you love!</p>
-                <Button>Browse Music</Button>
-              </div>
-            )}
+            ))}
           </div>
+
+          {wishlistItems.length === 0 && (
+            <div className="text-center py-12 sm:py-20">
+              <div className="size-16 sm:size-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <Heart className="size-8 sm:size-10 text-muted-foreground" />
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold mb-2">Your wishlist is empty</h2>
+              <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">
+                Start adding tracks and sample packs you love!
+              </p>
+              <Button>Browse Music</Button>
+            </div>
+          )}
         </main>
       </div>
       <MobileNav />
       <MusicPlayer />
     </div>
+  )
+}
+
+export default function WishlistPage() {
+  return (
+    <Suspense fallback={null}>
+      <WishlistContent />
+    </Suspense>
   )
 }

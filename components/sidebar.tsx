@@ -2,20 +2,18 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Users, Disc3, Package, User, Heart, ShoppingCart, Search } from "lucide-react"
+import { Home, Users, Disc3, Drum, User, Heart, ShoppingCart, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useState } from "react"
-import { SearchDialog } from "./search-dialog"
+import { ThemeToggle } from "./theme-toggle"
 
 export function Sidebar() {
   const pathname = usePathname()
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   const mainNavItems = [
     { href: "/", label: "Home", icon: Home },
     { href: "/artists", label: "Artists", icon: Users },
     { href: "/music", label: "Music", icon: Disc3 },
-    { href: "/sample-packs", label: "Sample Packs", icon: Package },
+    { href: "/sample-packs", label: "Sample Packs", icon: Drum },
   ]
 
   const libraryItems = [
@@ -47,13 +45,13 @@ export function Sidebar() {
         <div className="flex flex-col flex-1 min-h-0 overflow-y-auto">
           {/* Search Button */}
           <div className="px-3 pt-4 pb-2">
-            <button
-              onClick={() => setIsSearchOpen(true)}
+            <Link
+              href="/search"
               className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors w-full text-white/60 hover:bg-white/10 hover:text-white"
             >
               <Search className="h-5 w-5 shrink-0" />
               <span>Search</span>
-            </button>
+            </Link>
           </div>
 
           {/* Main Navigation */}
@@ -135,6 +133,14 @@ export function Sidebar() {
             </div>
           </div>
 
+          {/* Theme Toggle */}
+          <div className="px-6 py-3 border-t border-white/10">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-white/60">Theme</span>
+              <ThemeToggle />
+            </div>
+          </div>
+
           {/* Copyright */}
           <div className="px-6 py-4 border-t border-white/10">
             <p className="text-white/40">
@@ -143,7 +149,6 @@ export function Sidebar() {
           </div>
         </div>
       </aside>
-      <SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
     </>
   )
 }

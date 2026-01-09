@@ -7,6 +7,7 @@ import { MusicPlayer } from "@/components/music-player"
 import { ReleaseCard } from "@/components/release-card"
 import { Breadcrumb } from "@/components/breadcrumb"
 import { Button } from "@/components/ui/button"
+import { VerifiedBadge } from "@/components/verified-badge"
 import { ExternalLink, Upload } from "lucide-react"
 import { releases } from "@/lib/releases-data"
 import { getArtistById } from "@/lib/artists-data"
@@ -87,7 +88,10 @@ export default function ArtistPage() {
 
           {/* Artist Info Below Image */}
           <div className="max-w-7xl mx-auto mb-6 md:mb-12 mt-8 md:mt-16 text-center md:text-left">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-3">{artistInfo.name}</h1>
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-3 flex items-center gap-2 justify-center md:justify-start">
+              {artistInfo.name}
+              <VerifiedBadge className="w-8 h-8 md:w-10 md:h-10 shrink-0" />
+            </h1>
             <p className="text-lg text-muted-foreground mb-6">{artistInfo.genre}</p>
             
             {/* <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto md:mx-0 mb-6">

@@ -7,9 +7,8 @@ import { Sidebar } from "@/components/sidebar"
 import { MobileNav } from "@/components/mobile-nav"
 import { MusicPlayer } from "@/components/music-player"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { ShoppingCart, Trash2, Play, CreditCard, Tag } from "lucide-react"
+import { ShoppingCart, Trash2, Play, CreditCard, Tag, Lock, ChevronRight } from "lucide-react"
 import { Input } from "@/components/ui/input"
 
 const initialCartItems = [
@@ -42,13 +41,20 @@ const initialCartItems = [
 export default function CartPage() {
   const [cartItems, setCartItems] = useState(initialCartItems)
   const [promoCode, setPromoCode] = useState("")
+  const [promoApplied, setPromoApplied] = useState(false)
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0)
-  const discount = 0
+  const discount = promoApplied ? subtotal * 0.1 : 0
   const total = subtotal - discount
 
   const removeItem = (id: number) => {
     setCartItems(cartItems.filter((item) => item.id !== id))
+  }
+
+  const applyPromo = () => {
+    if (promoCode.toLowerCase() === "numba10") {
+      setPromoApplied(true)
+    }
   }
 
   return (
@@ -58,65 +64,98 @@ export default function CartPage() {
         <Header />
         <main className="container mx-auto px-6 pt-6 pb-24 md:px-12 md:pt-12 md:pb-16 max-w-[1390px]">
           {/* Header */}
-          <div className="flex items-center gap-3 mb-8">
-            <ShoppingCart className="size-8 text-foreground" />
+          <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+            <div className="size-10 sm:size-14 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+              <ShoppingCart className="size-5 sm:size-7 text-white" />
+            </div>
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Shopping Cart</h1>
-              <p className="text-muted-foreground">{cartItems.length} items in your cart</p>
+              <h1 className="text-2xl sm:text-3xl font-bold">Shopping Cart</h1>
+              <p className="text-sm sm:text-base text-muted-foreground">{cartItems.length} items ready for checkout</p>
             </div>
           </div>
 
           {cartItems.length > 0 ? (
-            <div className="grid lg:grid-cols-3 gap-8">
+            <div className="flex flex-col-reverse lg:grid lg:grid-cols-3 gap-6 sm:gap-8">
               {/* Cart Items */}
-              <div className="lg:col-span-2 space-y-4">
-                {cartItems.map((item) => (
-                  <Card key={item.id} className="overflow-hidden">
-                    <CardContent className="p-0">
-                      <div className="flex items-center gap-4 p-4">
-                        {/* Album Art */}
-                        <div className="relative group shrink-0">
-                          <div className="w-20 h-20 bg-muted rounded-md" />
-                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center">
-                            <Button size="icon" variant="ghost" className="text-white hover:text-white hover:bg-white/20">
-                              <Play className="size-6 fill-current" />
-                            </Button>
-                          </div>
-                        </div>
+              <div className="lg:col-span-2 space-y-2">
+                {/* Column Headers */}
+                <div className="hidden sm:flex items-center gap-4 px-4 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <span className="w-6">#</span>
+                  <span className="w-14">Cover</span>
+                  <span className="flex-1">Title</span>
+                  <span className="w-24">Type</span>
+                  <span className="w-20 text-right">Price</span>
+                  <span className="w-10"></span>
+                </div>
 
-                        {/* Info */}
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs text-muted-foreground uppercase tracking-wide">{item.type}</p>
-                          <h3 className="font-semibold text-foreground truncate">{item.title}</h3>
-                          <p className="text-sm text-muted-foreground">{item.artist}</p>
-                        </div>
+                <Separator className="hidden sm:block" />
 
-                        {/* Price & Remove */}
-                        <div className="flex items-center gap-4">
-                          <span className="font-semibold text-foreground text-lg">${item.price.toFixed(2)}</span>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="text-muted-foreground hover:text-destructive"
-                            onClick={() => removeItem(item.id)}
-                          >
-                            <Trash2 className="size-4" />
-                          </Button>
-                        </div>
+                {cartItems.map((item, index) => (
+                  <div
+                    key={item.id}
+                    className="group flex items-center gap-2 sm:gap-4 p-3 sm:p-4 rounded-lg hover:bg-muted/50 transition-colors"
+                  >
+                    {/* Index */}
+                    <span className="hidden sm:block w-6 text-center text-sm text-muted-foreground group-hover:hidden">
+                      {index + 1}
+                    </span>
+                    <button className="hidden sm:hidden sm:group-hover:flex w-6 items-center justify-center">
+                      <Play className="size-4 fill-current" />
+                    </button>
+
+                    {/* Album Art */}
+                    <div className="relative shrink-0">
+                      <Image
+                        src={item.image || "/placeholder.svg"}
+                        alt={item.title}
+                        width={56}
+                        height={56}
+                        className="size-12 sm:size-14 rounded object-cover"
+                      />
+                    </div>
+
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium truncate text-sm sm:text-base">{item.title}</h3>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{item.artist}</p>
+                      <div className="flex items-center gap-2 mt-1 sm:hidden">
+                        <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                          {item.type}
+                        </span>
+                        <span className="text-sm font-medium">${item.price.toFixed(2)}</span>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+
+                    {/* Type Badge */}
+                    <span className="hidden sm:inline-flex w-24 px-3 py-1 text-xs font-medium text-muted-foreground bg-muted rounded-full text-center">
+                      {item.type}
+                    </span>
+
+                    {/* Price */}
+                    <span className="hidden sm:block w-20 text-right font-medium">
+                      ${item.price.toFixed(2)}
+                    </span>
+
+                    {/* Remove */}
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="w-8 sm:w-10 h-8 sm:h-10 text-muted-foreground hover:text-red-500 hover:bg-transparent"
+                      onClick={() => removeItem(item.id)}
+                    >
+                      <Trash2 className="size-4" />
+                    </Button>
+                  </div>
                 ))}
               </div>
 
               {/* Order Summary */}
               <div className="lg:col-span-1">
-                <Card className="sticky top-6">
-                  <CardHeader>
-                    <CardTitle>Order Summary</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {/* Promo Code */}
+                <div className="bg-card rounded-xl p-4 sm:p-6 lg:sticky lg:top-6 border">
+                  <h2 className="text-base sm:text-lg font-bold mb-4 sm:mb-6">Order Summary</h2>
+
+                  {/* Promo Code */}
+                  <div className="mb-4 sm:mb-6">
                     <div className="flex gap-2">
                       <div className="relative flex-1">
                         <Tag className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
@@ -124,51 +163,72 @@ export default function CartPage() {
                           placeholder="Promo code"
                           value={promoCode}
                           onChange={(e) => setPromoCode(e.target.value)}
-                          className="pl-10"
+                          className="pl-10 text-sm sm:text-base h-9 sm:h-10"
+                          disabled={promoApplied}
                         />
                       </div>
-                      <Button variant="outline">Apply</Button>
+                      <Button
+                        variant="outline"
+                        onClick={applyPromo}
+                        disabled={promoApplied}
+                        className="text-sm sm:text-base h-9 sm:h-10"
+                      >
+                        {promoApplied ? "Applied" : "Apply"}
+                      </Button>
                     </div>
+                    {promoApplied && <p className="text-xs text-emerald-500 mt-2">10% discount applied!</p>}
+                  </div>
 
-                    <Separator />
+                  <Separator className="mb-4 sm:mb-6" />
 
-                    {/* Price Breakdown */}
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Subtotal ({cartItems.length} items)</span>
-                        <span className="text-foreground">${subtotal.toFixed(2)}</span>
+                  {/* Price Breakdown */}
+                  <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
+                    <div className="flex justify-between text-xs sm:text-sm">
+                      <span className="text-muted-foreground">Subtotal ({cartItems.length} items)</span>
+                      <span>${subtotal.toFixed(2)}</span>
+                    </div>
+                    {discount > 0 && (
+                      <div className="flex justify-between text-xs sm:text-sm">
+                        <span className="text-muted-foreground">Discount</span>
+                        <span className="text-emerald-500">-${discount.toFixed(2)}</span>
                       </div>
-                      {discount > 0 && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Discount</span>
-                          <span className="text-green-600">-${discount.toFixed(2)}</span>
-                        </div>
-                      )}
+                    )}
+                    <div className="flex justify-between text-xs sm:text-sm">
+                      <span className="text-muted-foreground">Processing fee</span>
+                      <span>$0.00</span>
                     </div>
+                  </div>
 
-                    <Separator />
+                  <Separator className="mb-4 sm:mb-6" />
 
-                    <div className="flex justify-between font-semibold text-lg">
-                      <span className="text-foreground">Total</span>
-                      <span className="text-foreground">${total.toFixed(2)}</span>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex-col gap-3">
-                    <Button className="w-full gap-2" size="lg">
-                      <CreditCard className="size-4" />
-                      Checkout
-                    </Button>
-                    <p className="text-xs text-muted-foreground text-center">Secure checkout powered by Stripe</p>
-                  </CardFooter>
-                </Card>
+                  <div className="flex justify-between font-bold text-lg sm:text-xl mb-4 sm:mb-6">
+                    <span>Total</span>
+                    <span>${total.toFixed(2)}</span>
+                  </div>
+
+                  <Button className="w-full h-10 sm:h-12 font-semibold gap-2 mb-3 sm:mb-4 text-sm sm:text-base">
+                    <CreditCard className="size-4 sm:size-5" />
+                    Checkout
+                    <ChevronRight className="size-4" />
+                  </Button>
+
+                  <div className="flex items-center justify-center gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                    <Lock className="size-3" />
+                    <span>Secure checkout powered by Stripe</span>
+                  </div>
+                </div>
               </div>
             </div>
           ) : (
             /* Empty State */
-            <div className="text-center py-16">
-              <ShoppingCart className="size-16 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-foreground mb-2">Your cart is empty</h2>
-              <p className="text-muted-foreground mb-6">Add some tracks or sample packs to get started!</p>
+            <div className="text-center py-12 sm:py-20">
+              <div className="size-16 sm:size-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <ShoppingCart className="size-8 sm:size-10 text-muted-foreground" />
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold mb-2">Your cart is empty</h2>
+              <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">
+                Add some tracks or sample packs to get started!
+              </p>
               <Button>Browse Music</Button>
             </div>
           )}

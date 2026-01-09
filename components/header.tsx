@@ -1,12 +1,13 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Menu, Search, User, LogOut, Upload } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
 import { MobileMenu } from "./mobile-menu"
 import { AuthDialog } from "./auth-dialog"
-import { SearchDialog } from "./search-dialog"
+import { ThemeToggle } from "./theme-toggle"
 import { useAuth } from "@/lib/auth-context"
 import {
   DropdownMenu,
@@ -18,9 +19,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function Header() {
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isAuthOpen, setIsAuthOpen] = useState(false)
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const { user, signOut } = useAuth()
 
@@ -57,11 +58,12 @@ export function Header() {
               </div>
             </div>
             <div className="flex items-center gap-4">
+              <ThemeToggle />
               <Button 
                 variant="ghost" 
                 size="icon" 
                 className="hidden md:flex cursor-pointer text-white hover:bg-white/10"
-                onClick={() => setIsSearchOpen(true)}
+                onClick={() => router.push('/search')}
               >
                 <Search className="h-5 w-5" />
               </Button>
@@ -107,10 +109,8 @@ export function Header() {
           </div>
         </div>
       </header>
-
       <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <AuthDialog open={isAuthOpen} onOpenChange={setIsAuthOpen} />
-      <SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
     </>
   )
 }

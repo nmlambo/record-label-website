@@ -41,8 +41,8 @@ export default function MusicPage() {
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="bg-white rounded-full p-3">
-                        <Play className="h-6 w-6 text-black fill-black" />
+                      <div className="bg-primary rounded-full p-3">
+                        <Play className="h-6 w-6 text-primary-foreground fill-primary-foreground" />
                       </div>
                     </div>
                   </div>

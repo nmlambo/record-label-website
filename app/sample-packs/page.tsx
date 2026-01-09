@@ -42,8 +42,8 @@ export default function SamplePacksPage() {
                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center">
-                      <Download className="h-5 w-5 text-black" />
+                    <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
+                      <Download className="h-5 w-5 text-primary-foreground" />
                     </div>
                   </div>
                 </div>

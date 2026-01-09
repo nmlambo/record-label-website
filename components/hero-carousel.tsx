@@ -119,14 +119,14 @@ export function HeroCarousel() {
 
                   {/* Release Info */}
                   <div className="text-center md:text-left">
-                    <p className="fluid-text-xs md:text-sm font-medium text-black mb-2 tracking-wider uppercase">
+                    <p className="fluid-text-xs md:text-sm font-medium text-foreground mb-2 tracking-wider uppercase">
                       {slide.type}
                     </p>
-                    <h2 className="fluid-text-3xl md:text-6xl font-bold tracking-tighter mb-3 text-black">{slide.title}</h2>
-                    <p className="fluid-text-lg md:text-2xl text-black mb-6">{slide.artist}</p>
+                    <h2 className="fluid-text-3xl md:text-6xl font-bold tracking-tighter mb-3 text-foreground">{slide.title}</h2>
+                    <p className="fluid-text-lg md:text-2xl text-foreground mb-6">{slide.artist}</p>
                     <Button 
                       size="lg" 
-                      className="bg-white text-black hover:bg-white/90"
+                      className="bg-primary text-primary-foreground hover:bg-primary/90"
                       onClick={() => handleListenNow(slide.link.replace('/release/', ''))}
                     >
                       Listen Now
