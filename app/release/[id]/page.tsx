@@ -83,7 +83,7 @@ export default function ReleasePage() {
 
 
   return (
-    <div className="min-h-screen pb-40 md:pb-24">
+    <div className="min-h-screen pb-32 md:pb-24">
       <Sidebar />
       <div className="md:ml-64">
         <Header />
