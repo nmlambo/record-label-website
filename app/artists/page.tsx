@@ -23,7 +23,7 @@ export default function ArtistsPage() {
       <Sidebar />
       <div className="md:ml-64">
         <Header />
-        <main className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-12 max-w-[1390px]">
+        <main className="container mx-auto px-6 pt-6 pb-24 md:px-12 md:pt-12 md:pb-16 max-w-[1390px]">
         <Breadcrumb 
           items={[
             { label: "Home", href: "/" },

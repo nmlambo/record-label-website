@@ -48,7 +48,7 @@ export default function ReleasePage() {
         <Sidebar />
         <div className="md:ml-64">
           <Header />
-          <main className="container mx-auto px-4 py-8 md:py-12 max-w-[1390px]">
+          <main className="container mx-auto px-6 pt-6 pb-24 md:px-12 md:pt-12 md:pb-16 max-w-[1390px]">
           <div className="text-center py-20">
             <h1 className="text-4xl font-bold mb-4">Release Not Found</h1>
             <p className="text-muted-foreground mb-8">The release you're looking for doesn't exist.</p>
@@ -87,7 +87,7 @@ export default function ReleasePage() {
       <Sidebar />
       <div className="md:ml-64">
         <Header />
-        <main className="container mx-auto px-4 pt-4 pb-22 md:pt-6 md:pb-12 max-w-[1390px]">
+        <main className="container mx-auto px-6 pt-6 pb-24 md:px-12 md:pt-12 md:pb-16 max-w-[1390px]">
         <Breadcrumb 
           items={[
             { label: "Home", href: "/" },

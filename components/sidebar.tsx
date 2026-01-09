@@ -138,7 +138,7 @@ export function Sidebar() {
           {/* Copyright */}
           <div className="px-6 py-4 border-t border-white/10">
             <p className="text-white/40">
-              <span className="text-xs">©</span> <span className="text-[9px]">{new Date().getFullYear()} NUMBA, Inc.</span>
+              <span className="text-xs">©</span> <span className="text-[9px]">2026 NUMBA, Inc.</span>
             </p>
           </div>
         </div>
