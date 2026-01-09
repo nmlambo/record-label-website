@@ -143,7 +143,7 @@ export function HeroCarousel() {
       <Button
         variant="ghost"
         size="icon"
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white transition-opacity"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white border border-white/20 dark:border-white/30 transition-opacity"
         onClick={prevSlide}
       >
         <ChevronLeft className="h-6 w-6" />
@@ -151,7 +151,7 @@ export function HeroCarousel() {
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white transition-opacity"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white border border-white/20 dark:border-white/30 transition-opacity"
         onClick={nextSlide}
       >
         <ChevronRight className="h-6 w-6" />
