@@ -68,7 +68,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </div>
 
           {/* Content */}
-          <div className="flex flex-col flex-1 min-h-0 overflow-y-auto pb-24">
+          <div className="flex flex-col flex-1 min-h-0 overflow-y-auto pb-2">
             {/* Search Button */}
             <div className="px-3 pt-4 pb-2">
               <button
