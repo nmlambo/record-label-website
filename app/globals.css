@@ -146,15 +146,6 @@
     min-height: 100dvh;
   }
   
-  /* Fix for mobile browser address bar collapsing */
-  @supports (height: 100dvh) {
-    @media (max-width: 768px) {
-      body {
-        min-height: 100dvh;
-      }
-    }
-  }
-  
   /* Mobile-only fluid scaling utilities */
   @media (max-width: 768px) {
     .fluid-text-xs { font-size: var(--fluid-text-xs); }
