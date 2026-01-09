@@ -13,7 +13,7 @@ interface ArtistCardProps {
 export function ArtistCard({ id, name, genre, image, releaseCount }: ArtistCardProps) {
   return (
     <Link href={`/artist/${id}`} className="cursor-pointer">
-      <Card className="group overflow-hidden border-0 bg-transparent hover:bg-muted/50 transition-all duration-300 py-0 gap-3">
+      <Card className="group overflow-hidden border-border bg-transparent hover:bg-muted/50 transition-all duration-300 py-0 gap-3">
         <div className="aspect-square relative overflow-hidden bg-muted">
           <img
             src={image || "/placeholder.svg"}

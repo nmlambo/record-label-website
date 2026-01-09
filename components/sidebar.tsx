@@ -26,6 +26,16 @@ export function Sidebar() {
     if (path === "/") {
       return pathname === "/"
     }
+    // Handle nested routes
+    if (path === "/artists" && pathname.startsWith("/artist")) {
+      return true
+    }
+    if (path === "/music" && pathname.startsWith("/release")) {
+      return true
+    }
+    if (path === "/sample-packs" && pathname.startsWith("/sample-pack")) {
+      return true
+    }
     return pathname.startsWith(path)
   }
 
