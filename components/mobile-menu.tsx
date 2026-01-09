@@ -50,7 +50,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
   return (
     <>
-      <div className={`fixed inset-0 bottom-16 z-50 bg-black md:hidden transition-transform duration-300 ${
+      <div className={`fixed inset-0 z-60 bg-black md:hidden transition-transform duration-300 ${
         isClosing ? 'animate-out slide-out-to-left' : 'animate-in slide-in-from-left'
       }`}>
         <div className="h-full flex flex-col">
