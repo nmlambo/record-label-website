@@ -47,7 +47,7 @@ export default function SearchPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-background pb-32 md:pb-24">
+    <div className="min-h-screen pb-32 md:pb-24">
       <Sidebar />
       <div className="md:ml-64">
         <Header />
@@ -149,6 +149,7 @@ export default function SearchPage() {
                         type={release.type}
                         status={release.status}
                         image={release.image}
+                        isNew={release.isNew}
                       />
                     ))}
                   </div>
@@ -177,6 +178,13 @@ export default function SearchPage() {
                               alt={`${pack.title} by ${pack.artist}`}
                               className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                             />
+                            {pack.isNew && (
+                              <div className="absolute top-2 right-2">
+                                <span className="text-xs font-semibold bg-green-500 text-white px-2 py-1 rounded">
+                                  NEW
+                                </span>
+                              </div>
+                            )}
                           </div>
                           <div className="p-3 md:p-4">
                             <div className="flex items-start justify-between gap-2 mb-1">

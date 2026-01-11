@@ -13,7 +13,6 @@ export const exampleArtists = [
     social_links: {
       spotify: "https://open.spotify.com/artist/example",
       apple_music: "https://music.apple.com/artist/example",
-      soundcloud: "https://soundcloud.com/luna-echo",
       instagram: "https://instagram.com/lunaecho",
       twitter: "https://twitter.com/lunaecho"
     },
@@ -157,7 +156,6 @@ export const placeholderImages = {
 export const socialLinksExample = {
   spotify: "https://open.spotify.com/artist/...",
   apple_music: "https://music.apple.com/artist/...",
-  soundcloud: "https://soundcloud.com/...",
   youtube: "https://youtube.com/...",
   instagram: "https://instagram.com/...",
   twitter: "https://twitter.com/...",

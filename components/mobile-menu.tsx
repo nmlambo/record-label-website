@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { SearchDialog } from "./search-dialog"
 import { ThemeToggle } from "./theme-toggle"
+import { useCart } from "@/lib/cart-context"
+import { useWishlist } from "@/lib/wishlist-context"
 
 interface MobileMenuProps {
   isOpen: boolean
@@ -18,6 +20,8 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
+  const { items: cartItems } = useCart()
+  const { items: wishlistItems } = useWishlist()
 
   const mainNavItems = [
     { href: "/", label: "Home", icon: Home },
@@ -28,7 +32,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
   const libraryItems = [
     { href: "/profile", label: "Profile", icon: User },
-    { href: "/favourites", label: "Wishlist", icon: Heart },
+    { href: "/wishlist", label: "Wishlist", icon: Heart },
     { href: "/cart", label: "Cart", icon: ShoppingCart },
   ]
 
@@ -63,7 +67,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 BETA
               </span>
             </Link>
-            <Button variant="ghost" size="icon" onClick={handleClose} className="text-white hover:bg-white/10">
+            <Button variant="ghost" size="icon" onClick={handleClose} className="text-white hover:bg-white/10 rounded-full border border-white/20">
               <X className="h-6 w-6" />
             </Button>
           </div>
@@ -90,6 +94,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 {mainNavItems.map((item) => {
                   const Icon = item.icon
                   const active = isActive(item.href)
+                  const showIndicator = item.href === '/music' || item.href === '/sample-packs'
                   
                   return (
                     <Link
@@ -104,7 +109,10 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                       )}
                     >
                       <Icon className="h-5 w-5 shrink-0" />
-                      <span>{item.label}</span>
+                      <span className="flex-1">{item.label}</span>
+                      {showIndicator && (
+                        <span className={`w-1.5 h-1.5 bg-green-500 rounded-full shrink-0 ${!active ? 'animate-pulse' : ''}`} />
+                      )}
                     </Link>
                   )
                 })}
@@ -119,6 +127,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   {libraryItems.map((item) => {
                     const Icon = item.icon
                     const active = isActive(item.href)
+                    const count = item.href === '/cart' ? cartItems.length : item.href === '/wishlist' ? wishlistItems.length : 0
                     
                     return (
                       <Link
@@ -133,7 +142,12 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                         )}
                       >
                         <Icon className="h-5 w-5 shrink-0" />
-                        <span>{item.label}</span>
+                        <span className="flex-1">{item.label}</span>
+                        {count > 0 && (
+                          <span className="ml-auto bg-white/20 text-white text-xs font-semibold px-2 py-0.5 rounded-full min-w-[20px] text-center">
+                            {count}
+                          </span>
+                        )}
                       </Link>
                     )
                   })}

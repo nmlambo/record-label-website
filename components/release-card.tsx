@@ -9,9 +9,10 @@ interface ReleaseCardProps {
   type: string
   status: string
   image: string
+  isNew?: boolean
 }
 
-export function ReleaseCard({ id, title, artist, type, status, image }: ReleaseCardProps) {
+export function ReleaseCard({ id, title, artist, type, status, image, isNew }: ReleaseCardProps) {
   return (
     <Link href={`/release/${id}`} className="cursor-pointer">
       <Card className="group relative overflow-hidden border-border hover:border-foreground transition-all duration-300 py-0">
@@ -26,6 +27,13 @@ export function ReleaseCard({ id, title, artist, type, status, image }: ReleaseC
             <Play className="h-5 w-5 text-primary-foreground fill-primary-foreground ml-0.5" />
           </div>
         </div>
+        {isNew && (
+          <div className="absolute top-2 right-2">
+            <span className="text-xs font-semibold bg-green-500 text-white px-2 py-1 rounded">
+              NEW
+            </span>
+          </div>
+        )}
       </div>
       <div className="p-3 md:p-4">
         <div className="flex items-start justify-between gap-2 mb-1">

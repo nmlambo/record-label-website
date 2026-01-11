@@ -19,8 +19,8 @@ export const artists: Artist[] = [
     image: "/placeholder.svg",
     socialLinks: [
       { name: "Instagram", url: "#" },
+      { name: "Facebook", url: "#" },
       { name: "Twitter", url: "#" },
-      { name: "SoundCloud", url: "#" },
       { name: "Spotify", url: "#" },
     ]
   },
@@ -32,7 +32,6 @@ export const artists: Artist[] = [
     image: "/placeholder.svg",
     socialLinks: [
       { name: "Spotify", url: "#" },
-      { name: "SoundCloud", url: "#" },
       { name: "YouTube", url: "#" },
     ]
   },
@@ -56,7 +55,6 @@ export const artists: Artist[] = [
     image: "/placeholder.svg",
     socialLinks: [
       { name: "Bandcamp", url: "#" },
-      { name: "SoundCloud", url: "#" },
       { name: "Twitter", url: "#" },
     ]
   },

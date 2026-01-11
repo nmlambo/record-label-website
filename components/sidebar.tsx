@@ -5,9 +5,14 @@ import { usePathname } from "next/navigation"
 import { Home, Users, Disc3, Drum, User, Heart, ShoppingCart, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "./theme-toggle"
+import { useCart } from "@/lib/cart-context"
+import { useWishlist } from "@/lib/wishlist-context"
+import { useEffect, useState } from "react"
 
 export function Sidebar() {
   const pathname = usePathname()
+  const { items: cartItems } = useCart()
+  const { items: wishlistItems } = useWishlist()
 
   const mainNavItems = [
     { href: "/", label: "Home", icon: Home },
@@ -18,7 +23,7 @@ export function Sidebar() {
 
   const libraryItems = [
     { href: "/profile", label: "Profile", icon: User },
-    { href: "/favourites", label: "Wishlist", icon: Heart },
+    { href: "/wishlist", label: "Wishlist", icon: Heart },
     { href: "/cart", label: "Cart", icon: ShoppingCart },
   ]
 
@@ -70,6 +75,7 @@ export function Sidebar() {
               {mainNavItems.map((item) => {
                 const Icon = item.icon
                 const active = isActive(item.href)
+                const showIndicator = item.href === '/music' || item.href === '/sample-packs'
                 
                 return (
                   <Link
@@ -83,7 +89,10 @@ export function Sidebar() {
                     )}
                   >
                     <Icon className="h-5 w-5 shrink-0" />
-                    <span>{item.label}</span>
+                    <span className="flex-1">{item.label}</span>
+                    {showIndicator && (
+                      <span className={`w-1.5 h-1.5 bg-green-500 rounded-full shrink-0 ${!active ? 'animate-pulse' : ''}`} />
+                    )}
                   </Link>
                 )
               })}
@@ -99,6 +108,8 @@ export function Sidebar() {
                   const Icon = item.icon
                   const active = isActive(item.href)
                   
+                  const count = item.href === '/cart' ? cartItems.length : item.href === '/wishlist' ? wishlistItems.length : 0
+                  
                   return (
                     <Link
                       key={item.href}
@@ -111,7 +122,12 @@ export function Sidebar() {
                       )}
                     >
                       <Icon className="h-5 w-5 shrink-0" />
-                      <span>{item.label}</span>
+                      <span className="flex-1">{item.label}</span>
+                      {count > 0 && (
+                        <span className="ml-auto bg-white/20 text-white text-xs font-semibold px-2 py-0.5 rounded-full min-w-[20px] text-center">
+                          {count}
+                        </span>
+                      )}
                     </Link>
                   )
                 })}

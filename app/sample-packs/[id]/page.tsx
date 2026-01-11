@@ -1,6 +1,6 @@
 "use client"
 
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useState } from "react"
 import { Header } from "@/components/header"
 import { Sidebar } from "@/components/sidebar"
@@ -9,16 +9,77 @@ import { MusicPlayer } from "@/components/music-player"
 import { Breadcrumb } from "@/components/breadcrumb"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { PlayCircle, PauseCircle, Download, ShoppingCart, Check } from "lucide-react"
+import { PlayCircle, PauseCircle, Download, ShoppingCart, Check, Heart } from "lucide-react"
 import Link from "next/link"
 import { getSamplePackById } from "@/lib/sample-packs-data"
+import { useCart } from "@/lib/cart-context"
+import { useWishlist } from "@/lib/wishlist-context"
+import { useMusicPlayer } from "@/lib/music-player-context"
+import { useToast } from "@/hooks/use-toast"
+import { ToastAction } from "@/components/ui/toast"
+import { getPolarProductId } from "@/lib/polar-products"
 
 export default function SamplePackPage() {
   const params = useParams()
+  const router = useRouter()
   const packId = params.id as string
   const pack = getSamplePackById(packId)
+  const { addItem } = useCart()
+  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist()
+  const { playSample, currentTrack, isPlaying: playerIsPlaying } = useMusicPlayer()
+  const { toast } = useToast()
   const [currentPreview, setCurrentPreview] = useState<string | null>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
+
+  const handleAddToCart = () => {
+    if (!pack) return
+
+    const productId = getPolarProductId("Sample Pack", pack.price, false)
+
+    addItem({
+      id: pack.id,
+      productId: productId,
+      title: pack.title,
+      artist: pack.artist,
+      type: "Sample Pack",
+      price: pack.price,
+      image: pack.image,
+      isTrack: false,
+    })
+
+    toast({
+      title: "Added to cart",
+      description: `${pack.title} has been added to your cart.`,
+      action: <ToastAction altText="View cart" onClick={() => router.push('/cart')}>View</ToastAction>,
+    })
+  }
+
+  const handleToggleWishlist = () => {
+    if (!pack) return
+
+    const inWishlist = isInWishlist(pack.id)
+
+    if (inWishlist) {
+      removeFromWishlist(pack.id)
+      toast({
+        title: "Removed from wishlist",
+        description: `${pack.title} has been removed from your wishlist.`,
+      })
+    } else {
+      addToWishlist({
+        id: pack.id,
+        title: pack.title,
+        artist: pack.artist,
+        type: "Sample Pack",
+        price: pack.price,
+        image: pack.image,
+      })
+      toast({
+        title: "Added to wishlist",
+        description: `${pack.title} has been added to your wishlist.`,
+        action: <ToastAction altText="View wishlist" onClick={() => router.push('/wishlist')}>View</ToastAction>,
+      })
+    }
+  }
 
   if (!pack) {
     return (
@@ -43,12 +104,22 @@ export default function SamplePackPage() {
   }
 
   const handlePreviewPlay = (sampleId: string) => {
-    if (currentPreview === sampleId && isPlaying) {
-      setIsPlaying(false)
-    } else {
-      setCurrentPreview(sampleId)
-      setIsPlaying(true)
-    }
+    if (!pack) return
+
+    const sample = pack.previewSamples.find(s => s.id === sampleId)
+    if (!sample) return
+
+    // Use a real audio URL for testing - you'll need to replace these with actual audio files
+    const testAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+
+    playSample(
+      sample.name,
+      testAudioUrl, // Using test URL until real audio files are available
+      pack.title,
+      pack.image,
+      pack.artist
+    )
+    setCurrentPreview(sampleId)
   }
 
   return (
@@ -125,16 +196,24 @@ export default function SamplePackPage() {
             {/* Price & Purchase */}
             <div className="space-y-3">
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold">${pack.price}</span>
+                <span className="text-4xl font-bold">${pack.price.toFixed(2)}</span>
                 <span className="text-muted-foreground">USD</span>
               </div>
               <div className="flex gap-3">
-                <Button className="flex-1 bg-black text-white hover:bg-black/90" size="lg">
+                <Button 
+                  className="flex-1 bg-black text-white hover:bg-black/90" 
+                  size="lg"
+                  onClick={handleAddToCart}
+                >
                   <ShoppingCart className="h-5 w-5 mr-2" />
                   Add to Cart
                 </Button>
-                <Button variant="outline" size="lg">
-                  <Download className="h-5 w-5" />
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  onClick={handleToggleWishlist}
+                >
+                  <Heart className={`h-5 w-5 ${isInWishlist(pack.id) ? 'fill-current text-rose-500' : ''}`} />
                 </Button>
               </div>
             </div>
@@ -168,7 +247,7 @@ export default function SamplePackPage() {
                       onClick={() => handlePreviewPlay(sample.id)}
                       className="shrink-0"
                     >
-                      {currentPreview === sample.id && isPlaying ? (
+                      {currentPreview === sample.id && playerIsPlaying && currentTrack?.title === sample.name ? (
                         <PauseCircle className="h-8 w-8" />
                       ) : (
                         <PlayCircle className="h-8 w-8" />

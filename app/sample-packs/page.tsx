@@ -46,6 +46,13 @@ export default function SamplePacksPage() {
                       <Download className="h-5 w-5 text-primary-foreground" />
                     </div>
                   </div>
+                  {pack.isNew && (
+                    <div className="absolute top-2 right-2">
+                      <span className="text-xs font-semibold bg-green-500 text-white px-2 py-1 rounded">
+                        NEW
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="p-3 md:p-4">
                   <div className="flex items-start justify-between gap-2 mb-1">

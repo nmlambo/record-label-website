@@ -111,7 +111,7 @@ export function HeroCarousel() {
                       <img
                         src={slide.image || "/placeholder.svg"}
                         alt={slide.title}
-                        className="w-full h-full object-cover shadow-2xl"
+                        className="w-full h-full object-cover shadow-2xl border border-gray-700"
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover/card:bg-black/10 transition-colors duration-300" />
                     </div>

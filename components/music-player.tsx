@@ -1,15 +1,19 @@
 "use client"
 
-import { useState } from "react"
-import { Play, Pause, SkipBack, SkipForward, Volume2 } from "lucide-react"
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Play, Pause, SkipBack, SkipForward, Volume2, Home, Users, Drum, Search, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { useMusicPlayer } from "@/lib/music-player-context"
 import { DevicePicker } from "@/components/device-picker"
 import { VerifiedBadge } from "@/components/verified-badge"
+import { cn } from "@/lib/utils"
 
 export function MusicPlayer() {
   const [isDevicePickerOpen, setIsDevicePickerOpen] = useState(false)
+  const pathname = usePathname()
   
   const {
     currentTrack,
@@ -26,6 +30,14 @@ export function MusicPlayer() {
     seekTo,
     setVolume: setPlayerVolume,
   } = useMusicPlayer()
+
+  const navItems = [
+    { href: "/", label: "Home", icon: Home },
+    { href: "/artists", label: "Artists", icon: Users },
+    { href: "/sample-packs", label: "Samples", icon: Drum },
+    { href: "/search", label: "Search", icon: Search },
+    { href: "/profile", label: "Profile", icon: User },
+  ]
 
   const handleSeek = (value: number[]) => {
     if (duration) {
@@ -45,11 +57,12 @@ export function MusicPlayer() {
   }
 
   const progress = duration ? (currentTime / duration) * 100 : 0
+  const hasTrack = currentTrack !== null
 
   return (
-    <div className="fixed bottom-16 md:bottom-0 left-0 right-0 z-50 border-t border-border bg-gradient-to-t from-background via-background to-background/0 dark:bg-background/95 backdrop-blur-2xl supports-backdrop-filter:bg-background/60">
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-gradient-to-t from-background via-background to-background/0 dark:bg-background/95 backdrop-blur-2xl supports-backdrop-filter:bg-background/60">
       <div className="container mx-auto px-4 py-3 max-w-[1390px]">
-        <div className="flex items-center gap-4">
+        <div className={`flex items-center gap-4 ${!hasTrack ? 'opacity-50' : ''}`}>
           {/* Track Info */}
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <div className="w-12 h-12 bg-muted rounded shrink-0">
@@ -78,7 +91,13 @@ export function MusicPlayer() {
 
           {/* Controls - Desktop */}
           <div className="hidden md:flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8 cursor-pointer" onClick={skipToPrevious}>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8 cursor-pointer" 
+              onClick={skipToPrevious}
+              disabled={!hasTrack}
+            >
               <SkipBack className="h-4 w-4" />
             </Button>
             <Button
@@ -86,6 +105,7 @@ export function MusicPlayer() {
               size="icon"
               className="h-10 w-10 rounded-full cursor-pointer"
               onClick={togglePlayPause}
+              disabled={!hasTrack}
             >
               {isPlaying ? (
                 <Pause className="h-5 w-5 fill-current" />
@@ -93,7 +113,13 @@ export function MusicPlayer() {
                 <Play className="h-5 w-5 fill-current ml-0.5" />
               )}
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 cursor-pointer" onClick={skipToNext}>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8 cursor-pointer" 
+              onClick={skipToNext}
+              disabled={!hasTrack}
+            >
               <SkipForward className="h-4 w-4" />
             </Button>
           </div>
@@ -145,7 +171,13 @@ export function MusicPlayer() {
 
           {/* Controls - Mobile */}
           <div className="flex md:hidden items-center gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8 cursor-pointer" onClick={skipToPrevious}>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8 cursor-pointer" 
+              onClick={skipToPrevious}
+              disabled={!hasTrack}
+            >
               <SkipBack className="h-4 w-4" />
             </Button>
             <Button
@@ -153,6 +185,7 @@ export function MusicPlayer() {
               size="icon"
               className="h-10 w-10 rounded-full cursor-pointer"
               onClick={togglePlayPause}
+              disabled={!hasTrack}
             >
               {isPlaying ? (
                 <Pause className="h-5 w-5 fill-current" />
@@ -160,7 +193,13 @@ export function MusicPlayer() {
                 <Play className="h-5 w-5 fill-current ml-0.5" />
               )}
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 cursor-pointer" onClick={skipToNext}>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8 cursor-pointer" 
+              onClick={skipToNext}
+              disabled={!hasTrack}
+            >
               <SkipForward className="h-4 w-4" />
             </Button>
           </div>
@@ -181,6 +220,32 @@ export function MusicPlayer() {
           <span className="text-xs text-muted-foreground tabular-nums">
             {formatTime(duration)}
           </span>
+        </div>
+
+        {/* Mobile Navigation - Integrated */}
+        <div className="md:hidden grid grid-cols-5 h-16 mt-3 -mx-4">
+          {navItems.map((item) => {
+            const Icon = item.icon
+            const isActive = pathname === item.href
+            const showIndicator = item.href === '/sample-packs'
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex flex-col items-center justify-center gap-1 transition-colors cursor-pointer relative",
+                  isActive ? "text-foreground" : "text-muted-foreground",
+                )}
+              >
+                <Icon className="h-5 w-5" />
+                <span className="text-xs font-medium">{item.label}</span>
+                {showIndicator && (
+                  <span className={`absolute top-3 right-[calc(50%-12px)] w-1.5 h-1.5 bg-green-500 rounded-full ${!isActive ? 'animate-pulse' : ''}`} />
+                )}
+              </Link>
+            )
+          })}
         </div>
       </div>
       

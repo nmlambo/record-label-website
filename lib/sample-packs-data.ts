@@ -19,6 +19,7 @@ export interface SamplePack {
   features: string[]
   bpm?: string
   key?: string
+  isNew?: boolean
 }
 
 export const samplePacks: SamplePack[] = [
@@ -36,6 +37,7 @@ export const samplePacks: SamplePack[] = [
     tags: ["Afro House", "Melodic", "Percussion", "Organic"],
     bpm: "118-122 BPM",
     key: "Various",
+    isNew: true,
     features: [
       "180 high-quality samples",
       "24-bit/48kHz WAV files",
@@ -125,6 +127,7 @@ export const samplePacks: SamplePack[] = [
     tags: ["Organic House", "Natural", "Live Instruments", "Textures"],
     bpm: "118-122 BPM",
     key: "Various",
+    isNew: true,
     features: [
       "140 organic samples",
       "24-bit/48kHz audio",

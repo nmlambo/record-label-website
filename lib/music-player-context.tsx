@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useRef, useEffect, ReactNode } from "react"
 import { Track } from "./releases-data"
 import { incrementPlayCount, hasFreePlaysRemaining, isTrackPurchased } from "./play-count-storage"
+import { saveLastPlayedTrack, getLastPlayedTrack, type LastPlayedTrack } from "./last-played-storage"
 
 interface MusicPlayerContextType {
   currentTrack: Track | null
@@ -17,6 +18,7 @@ interface MusicPlayerContextType {
   volume: number
   playRelease: (releaseId: string, tracks: Track[], startIndex?: number, releaseImage?: string, releaseTitle?: string, artist?: string) => void
   playTrack: (track: Track) => void
+  playSample: (sampleName: string, audioUrl: string, packTitle: string, packImage?: string, artist?: string) => void
   togglePlayPause: () => void
   skipToNext: () => void
   skipToPrevious: () => void
@@ -47,6 +49,9 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
       
       const audio = audioRef.current
       
+      // Enable preloading for faster playback
+      audio.preload = 'auto'
+      
       audio.addEventListener('timeupdate', () => {
         setCurrentTime(audio.currentTime)
       })
@@ -58,6 +63,26 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
       audio.addEventListener('ended', () => {
         skipToNext()
       })
+
+      // Load last played track for returning users
+      const lastPlayed = getLastPlayedTrack()
+      if (lastPlayed) {
+        setCurrentReleaseId(lastPlayed.releaseId)
+        setCurrentReleaseImage(lastPlayed.releaseImage)
+        setCurrentReleaseTitle(lastPlayed.releaseTitle)
+        setCurrentArtist(lastPlayed.artist)
+        setCurrentTrack({
+          number: lastPlayed.trackNumber,
+          title: lastPlayed.trackTitle,
+          duration: lastPlayed.trackDuration,
+          price: lastPlayed.trackPrice,
+          audioUrl: lastPlayed.trackAudioUrl,
+          key: lastPlayed.trackId,
+        })
+        // Preload the last played track for instant playback
+        audio.src = lastPlayed.trackAudioUrl
+        audio.load()
+      }
 
       return () => {
         audio.pause()
@@ -95,14 +120,58 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     setCurrentTrack(track)
     
     if (audioRef.current && track) {
-      audioRef.current.src = track.audioUrl
-      audioRef.current.play()
-      setIsPlaying(true)
+      const audio = audioRef.current
       
-      // Increment play count only if not purchased
-      if (!isPurchased) {
-        incrementPlayCount(trackId)
+      // If the same track is already loaded, just play it
+      if (audio.src === track.audioUrl && audio.readyState >= 2) {
+        audio.play().catch(error => {
+          if (error.name !== 'AbortError') {
+            console.error('Error playing audio:', error)
+          }
+          setIsPlaying(false)
+        })
+        setIsPlaying(true)
+      } else {
+        // Load new track
+        audio.src = track.audioUrl
+        audio.load()
+        
+        // Play as soon as enough data is loaded
+        const canPlayHandler = () => {
+          audio.play().catch(error => {
+            if (error.name !== 'AbortError') {
+              console.error('Error playing audio:', error)
+            }
+            setIsPlaying(false)
+          })
+          audio.removeEventListener('canplay', canPlayHandler)
+        }
+        
+        audio.addEventListener('canplay', canPlayHandler)
+        setIsPlaying(true)
       }
+      
+      // Increment play count only if not purchased (non-blocking)
+      if (!isPurchased) {
+        setTimeout(() => incrementPlayCount(trackId), 0)
+      }
+      
+      // Save as last played track (non-blocking to avoid delaying playback)
+      setTimeout(() => {
+        saveLastPlayedTrack({
+          trackId: trackId,
+          trackTitle: track.title,
+          trackNumber: track.number,
+          trackDuration: track.duration,
+          trackPrice: track.price,
+          trackAudioUrl: track.audioUrl,
+          releaseId: releaseId,
+          releaseTitle: releaseTitle || '',
+          releaseImage: releaseImage || '',
+          artist: artist || '',
+          timestamp: Date.now(),
+        })
+      }, 0)
     }
   }
 
@@ -111,7 +180,13 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     
     if (audioRef.current) {
       audioRef.current.src = track.audioUrl
-      audioRef.current.play()
+      audioRef.current.play().catch(error => {
+        // Ignore AbortError - happens when play is interrupted
+        if (error.name !== 'AbortError') {
+          console.error('Error playing audio:', error)
+        }
+        setIsPlaying(false)
+      })
       setIsPlaying(true)
     }
   }
@@ -123,7 +198,13 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
       audioRef.current.pause()
       setIsPlaying(false)
     } else {
-      audioRef.current.play()
+      audioRef.current.play().catch(error => {
+        // Ignore AbortError - happens when play is interrupted
+        if (error.name !== 'AbortError') {
+          console.error('Error playing audio:', error)
+        }
+        setIsPlaying(false)
+      })
       setIsPlaying(true)
     }
   }
@@ -137,7 +218,13 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     
     if (audioRef.current) {
       audioRef.current.src = playlist[nextIndex].audioUrl
-      audioRef.current.play()
+      audioRef.current.play().catch(error => {
+        // Ignore AbortError - happens when play is interrupted
+        if (error.name !== 'AbortError') {
+          console.error('Error playing audio:', error)
+        }
+        setIsPlaying(false)
+      })
       setIsPlaying(true)
     }
   }
@@ -151,7 +238,13 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     
     if (audioRef.current) {
       audioRef.current.src = playlist[prevIndex].audioUrl
-      audioRef.current.play()
+      audioRef.current.play().catch(error => {
+        // Ignore AbortError - happens when play is interrupted
+        if (error.name !== 'AbortError') {
+          console.error('Error playing audio:', error)
+        }
+        setIsPlaying(false)
+      })
       setIsPlaying(true)
     }
   }
@@ -160,6 +253,37 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     if (audioRef.current) {
       audioRef.current.currentTime = time
       setCurrentTime(time)
+    }
+  }
+
+  const playSample = (sampleName: string, audioUrl: string, packTitle: string, packImage?: string, artist?: string) => {
+    // Create a temporary track object for the sample
+    const sampleTrack: Track = {
+      number: 1,
+      title: sampleName,
+      duration: 0,
+      price: 0,
+      audioUrl: audioUrl,
+      key: sampleName,
+    }
+
+    setCurrentTrack(sampleTrack)
+    setCurrentReleaseId(null)
+    setCurrentReleaseImage(packImage || null)
+    setCurrentReleaseTitle(packTitle)
+    setCurrentArtist(artist || null)
+    setPlaylist([sampleTrack])
+    setCurrentTrackIndex(0)
+
+    if (audioRef.current) {
+      audioRef.current.src = audioUrl
+      audioRef.current.play().catch(error => {
+        if (error.name !== 'AbortError') {
+          console.error('Error playing sample:', error)
+        }
+        setIsPlaying(false)
+      })
+      setIsPlaying(true)
     }
   }
 
@@ -182,6 +306,7 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
         volume,
         playRelease,
         playTrack,
+        playSample,
         togglePlayPause,
         skipToNext,
         skipToPrevious,

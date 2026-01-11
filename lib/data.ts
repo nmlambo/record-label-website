@@ -30,7 +30,6 @@ export interface Artist {
   social_links: {
     spotify?: string;
     apple_music?: string;
-    soundcloud?: string;
     instagram?: string;
     twitter?: string;
   };

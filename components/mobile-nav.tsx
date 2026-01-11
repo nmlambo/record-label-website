@@ -18,23 +18,29 @@ export function MobileNav() {
 
   return (
     <>
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-2xl border-t border-border supports-backdrop-filter:bg-background/60">
+      {/* Mobile nav is now integrated into the MusicPlayer component */}
+      {/* This component is kept for potential future use or desktop-only scenarios */}
+      <nav className="hidden">
         <div className="grid grid-cols-5 h-16">
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href
+            const showIndicator = item.href === '/sample-packs'
 
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-1 transition-colors cursor-pointer",
+                  "flex flex-col items-center justify-center gap-1 transition-colors cursor-pointer relative",
                   isActive ? "text-foreground" : "text-muted-foreground",
                 )}
               >
                 <Icon className="h-5 w-5" />
                 <span className="text-xs font-medium">{item.label}</span>
+                {showIndicator && (
+                  <span className="absolute top-3 right-[calc(50%-12px)] w-1.5 h-1.5 bg-green-500 rounded-full" />
+                )}
               </Link>
             )
           })}

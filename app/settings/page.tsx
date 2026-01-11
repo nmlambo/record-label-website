@@ -4,7 +4,7 @@ import { MusicPlayer } from "@/components/music-player"
 
 export default function SettingsPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Header />
       <main className="container mx-auto px-4 py-8 pb-32 md:pb-8 max-w-[1390px]">
         <h1 className="text-4xl font-bold mb-8">Settings</h1>

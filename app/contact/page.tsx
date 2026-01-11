@@ -9,7 +9,7 @@ import Link from "next/link";
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-background pb-32 md:pb-24">
+    <div className="min-h-screen pb-32 md:pb-24">
       <Sidebar />
       <div className="md:ml-64">
         <Header />
